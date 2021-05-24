@@ -17,10 +17,16 @@ const connection = db_config.init();
 //             } 
 //         });
 // };
-exports.selectEmail = (result, email) => {
+exports.selectEmail = (email, result) => {
     let sql = 'select email from user where email = ?';
 
-    connection.query(sql, [email], (err, results, fields) => { 
+    // param = result + "";
+
+    // console.log(param + "111");
+
+    console.log([email]);
+
+    connection.query(sql, [email.email], (err, results, fields) => { 
         console.log(result);
         if (err) { 
             console.error('Error code : ' + err.code); 
@@ -28,7 +34,9 @@ exports.selectEmail = (result, email) => {
             throw new Error(err); 
         } 
             else { 
-                result(results[0]);
+                // results2 = results[0];
+                // console.log(results2 + "333");
+                result(JSON.parse(JSON.stringify(results)));
             } 
         });
 };

@@ -1,10 +1,14 @@
 const userModel = require('../model/userModel');
-console.log("connect router");
+// console.log("connect router32423");
 
-exports.getEmail = (req, res)=>{
+exports.getEmail = (req, res) => {
+
     console.log("connect router2");
-    let email = req.body.email;
+
+    let email = {'email' : req.body.email};
+
     userModel.selectEmail(email, (result)=>{
+        console.log("connect router4");
         if(result.length == 0){
             res.json({
                 'state': 200,
@@ -21,7 +25,7 @@ exports.getEmail = (req, res)=>{
     });
 };
 
-exports.main = (req, res) => {
+exports.main=(req, res) => {
     console.log("잘 되니");
     res.send('respond with a resource');
-}
+};

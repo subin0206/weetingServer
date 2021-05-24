@@ -16,9 +16,15 @@ exports.createMoim = (req, res) => {
     moimModel.createMoim(meetingInfo, (result) => {
         if (result) {
             if (result.affectedRows === 1) {
-                // 어떤걸 보내줘야하나
+                res.json({
+                    'state': 200,
+                    'message':'생성 성공'
+                    });
             } else {
-                // 어떤걸 보내줘야하나
+                res.json({
+                    'state': 400,
+                    'message':'서버 에러'
+                    });
             }
         }
     });

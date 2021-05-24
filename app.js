@@ -9,7 +9,7 @@ var app = express();
 
 // var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-// var moimRouter = require('./routes/moim');
+var moimRouter = require('./routes/moim');
 
 // view engine setup
 app.set('port', process.env.PORT || 4000);
@@ -21,11 +21,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
 
 // app.use('/', indexRouter);
 app.use('/', usersRouter);
 // app.use('/users', usersRouter);
-// app.use('/moim', moimRouter);
+app.use('/moim', moimRouter);
 console.log("test222");
 
 // catch 404 and forward to error handler
@@ -44,5 +45,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+app.listen(4000); // 이거 써야됨
 
 module.exports = app;
