@@ -3,9 +3,13 @@ console.log("connect router");
 
 exports.getEmail = (req, res)=>{
     console.log("connect router2");
-    let email = req.body.email;
+    let email = {'email':req.body.email};
+    console.log('email', email);
     userModel.selectEmail(email, (result)=>{
-        if(result.length == 0){
+        if(
+            // result.RowsAffected === 1
+            result.length == 0
+            ){
             res.json({
                 'state': 200,
                 'message':'email 중복 아님'
@@ -17,7 +21,7 @@ exports.getEmail = (req, res)=>{
                 'message':'email 중복'
                 });
         }
-        console.log(result);
+        console.log(email);
     });
 };
 

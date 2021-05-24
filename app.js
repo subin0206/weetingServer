@@ -3,12 +3,13 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+var bodyParser = require('body-parser');
 
 var app = express();
 
-// var indexRouter = require('./routes/index');
+var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+
 // var moimRouter = require('./routes/moim');
 
 // view engine setup
@@ -21,9 +22,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-// app.use('/', indexRouter);
-app.use('/', usersRouter);
+app.use(bodyParser.json());
+app.use('/index', indexRouter);
+app.use('/user', usersRouter);
 // app.use('/users', usersRouter);
 // app.use('/moim', moimRouter);
 console.log("test222");
@@ -44,5 +45,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
+app.listen(4000);
 module.exports = app;
