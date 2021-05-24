@@ -4,7 +4,7 @@ const moimController = require('../controllers/moimController');
 
 router.post('/createMoim', moimController.createMoim);
 
-router.get('/showDetailMoim', moimController.showDetailMoim);
+router.get('/showDetailMoim/:meeting_id', moimController.showDetailMoim);
 
 // router.get('/showMoimList', moimController.showMoimList);
 

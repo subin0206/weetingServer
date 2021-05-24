@@ -16,30 +16,44 @@ exports.createMoim = (req, res) => {
 
     moimModel.createMoim(meetingInfo, (result) => {
         if (result) {
-            if (result.affectedRows === 1) {
+            if (result.state === 200) {
                 res.json({
                     'state': 200,
-                    'message':'생성 성공'
+                    'message':'생성 성공' 
                     });
-            } else {
+                console.log("1");
+            } else if (result.state === 404) {
+                res.json({
+                    'state' : 404,
+                    'message' : '중복된 모임명'
+                })
+                console.log("2");
+            }
+             else {
                 res.json({
                     'state': 400,
                     'message':'서버 에러'
                     });
+                console.log("3");
             }
         }
     });
 }
 
 exports.showDetailMoim = (req, res) => {
-    let meeting_id = req.body.meeting_id;
+
+    let meeting_id = req.params.meeting_id;
+
+    // let meeting_id = req.body.meeting_id;
 
     moimModel.showDetailMoim(meeting_id, (meeting) => {
         if (meeting) {
-            if (meeting.affectedRows === 1) {
+            if (meeting.state === 200) {
+                console.log("들어오나?");
                 res.json({
                     'state' : 200,
                     'message' : '조회 성공',
+                    'meeting' : meeting,
                     'is_member' : 'dsafa'
                 });
             }
