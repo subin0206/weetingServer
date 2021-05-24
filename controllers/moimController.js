@@ -9,6 +9,7 @@ exports.createMoim = (req, res) => {
         'age_min' : req.body.age_min,
         'meeting_img' : req.body.meeting_img,
         'meeting_description' : req.body.meeting_description,
+        'meeting_recruitment' : req.body.meeting_recruitment,
         'meeting_location' : req.body.meeting_location,
         'moim_master' : req.body.moim_master,
     };
