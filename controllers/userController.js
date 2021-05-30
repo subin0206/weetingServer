@@ -1,6 +1,9 @@
 const userModel = require('../model/userModel');
 console.log("connect router");
 const nodemailer = require('nodemailer');
+const { sign } = require("jsonwebtoken");
+const bcrypt = require('bcrypt'); 
+
 
 function randomToken(){
     var token = '';
@@ -30,7 +33,40 @@ exports.getEmail = (req, res)=>{
         console.log(email);
     });
 };
+exports.userLogin = (req, res, next) =>{
+    let item = {'email':req.body.email,
+                'pwd' : req.body.pwd};
 
+    userModel.selectUser(item.email,results=>{
+        console.log(item.email ,"email" , item.pwd, "pwd");
+        console.log(results.email, "결과 이메일");
+        if (!results) {
+            return res.json({
+              success: 0,
+              message: "Invalid ID or Password"
+            });
+          }
+          console.log(results.pwd , "results.pwd");
+          const pwd_result = bcrypt.compareSync(item.pwd, results[0].pwd);
+          if (pwd_result) {
+            const jsontoken = sign({ pwd_result: results }, "[Token 값]", {
+              expiresIn: "1h"
+            });
+            return res.json({
+              success: 1,
+              message: "login successfully",
+              token: jsontoken
+            });
+            
+          }
+          else {
+            return res.json({
+              success: 0,
+              message: "Invalid ID or Password"
+            });
+        }
+    });
+};
 exports.authEmail = (req, res, next) =>{
 
     let email = req.body.email;
@@ -84,21 +120,20 @@ exports.joinUser = (req, res) =>{
         'description' : req.body.description,
         'pwd' : req.body.pwd
     };
-    userModel.insertUser(item, result => {
-        if(error) {
-            res.json({
-            'state': 400,
-            'message':'회원가입 실패'
-            });
-            console.error('error', error);
-        }
-        else{
+    userModel.insertUser(item,(result)=>{
+        if(result.affectedRows === 1){
             res.json({
                 'state': 200,
                 'message':'회원가입 성공'
                 });
         }
-    });        
+        else{
+            res.json({
+                'state': 300,
+                'message':'회원가입 실패'
+                });
+        }
+    });       
 
 };
 exports.main = (req, res) => {
