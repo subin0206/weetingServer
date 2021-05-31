@@ -9,6 +9,8 @@ router.post('/auth/email', userController.authEmail);
 router.post('/join', userController.joinUser);
 router.post('/login', userController.userLogin);
 router.get('/', userController.main);
+router.get('/mypage', jwt.checkToken,userController.getUser);
+
 // router.get('/', function(req, res, next) {
 //   res.send("users");
 // });

@@ -20,9 +20,9 @@ exports.selectEmail = (data, result) => {
             } 
         });
 };
+
 exports.selectUser = (data, result) => {
-    console.log(data, "dTata");
-    let sql = 'select pwd from user where email = ?';
+    let sql = 'select * from user where email = ?';
     connection.query(sql, data, (err, results, fields)=>{
         console.log(data, "data.email");
         console.log(results[0],"resuls");
@@ -33,6 +33,24 @@ exports.selectUser = (data, result) => {
         } 
             else { 
                 result(JSON.parse(JSON.stringify(results)));
+                // result(results[0]);
+                console.log(results[0]);
+            } 
+        });
+};
+exports.selectUserInfo = (data, result) => {
+    let sql = 'select * from user where email = ?';
+    connection.query(sql, data.email, (err, results, fields)=>{
+        console.log(data, "data.email");
+        console.log(results[0],"resuls");
+        if (err) { 
+            console.error('Error code : ' + err.code); 
+            console.error('Error Message : ' + err.message); 
+            throw new Error(err); 
+        } 
+            else { 
+                result(JSON.parse(JSON.stringify(results)));
+                // result(results[0]);
                 console.log(results[0]);
             } 
         });

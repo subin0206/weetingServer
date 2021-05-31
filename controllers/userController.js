@@ -1,6 +1,7 @@
 const userModel = require('../model/userModel');
 console.log("connect router");
 const nodemailer = require('nodemailer');
+const jwt = require("jsonwebtoken");
 const { sign } = require("jsonwebtoken");
 const bcrypt = require('bcrypt'); 
 
@@ -33,6 +34,24 @@ exports.getEmail = (req, res)=>{
         console.log(email);
     });
 };
+exports.getUser = (req, res, next) =>{
+    let email = {'email':req.decoded.email};
+    console.log(email, 'email');
+    userModel.selectUserInfo(email, results=>{
+        console.log(results);
+
+        if(results){
+            res.json({
+                'state': 200,
+                'email': results[0].email,
+                'name': results[0].name,
+                'interests' : results[0].interests,
+                'description': results[0].description
+                });   
+        }
+        console.log(results);
+    });
+};
 exports.userLogin = (req, res, next) =>{
     let item = {'email':req.body.email,
                 'pwd' : req.body.pwd};
@@ -49,9 +68,10 @@ exports.userLogin = (req, res, next) =>{
           console.log(results.pwd , "results.pwd");
           const pwd_result = bcrypt.compareSync(item.pwd, results[0].pwd);
           if (pwd_result) {
-            const jsontoken = sign({ pwd_result: results }, "[Token 값]", {
+            const jsontoken = sign({ id:results[0].user_id, email:results[0].email }, "[Token 값]", {
               expiresIn: "1h"
             });
+            // res.cookie("token", jsontoken);
             return res.json({
               success: 1,
               message: "login successfully",
@@ -67,6 +87,7 @@ exports.userLogin = (req, res, next) =>{
         }
     });
 };
+
 exports.authEmail = (req, res, next) =>{
 
     let email = req.body.email;
