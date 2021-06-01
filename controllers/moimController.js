@@ -2,8 +2,6 @@ const moimModel = require('../model/moimModel');
 
 exports.createMoim = (req, res) => {
 
-    console.log("이미지 테스트 중 : 컨트롤러까지는 들어오나?");
-
     var meeting_img = req.file == undefined ? null : req.file.location;
 
     if (req.body.age_min > req.body.age_max) {

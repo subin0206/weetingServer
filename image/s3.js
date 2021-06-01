@@ -19,10 +19,6 @@ AWS.config.update({
 })
 
 const s3 = new AWS.S3();
-// const s3 = new AWS.S3({
-    // apiVersion : "2006-03-01",
-    // params : {Bucket : bucket}
-// });
 
 const upload = multer({
     storage : multerS3({
@@ -37,18 +33,5 @@ const upload = multer({
     }),
     limits : {fileSize : 5 * 1024 * 1024}
 })
-
-
-// 로컬에 저장 할 때 ========
-
-// var multer = require("multer");
-
-// const upload = multer({
-//     dest: 'uploads/'
-// });
-
-// module.exports = upload
-
-// =========================
 
 module.exports = upload
