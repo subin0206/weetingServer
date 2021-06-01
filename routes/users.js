@@ -1,21 +1,19 @@
-// import db_config from '/model/conn.js'
-var express = require('express');
-var router = express.Router();
-var db_config = require('../model/conn');
-var connection = db_config.init();
-console.log("test1");
-connection.query('SELECT * FROM user', function(err, results, fields) {
-  if (err) {
-    console.log(err);
-    console.log("test2");
-  }
-  console.log(results);
-});
-
-connection.end();
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
-
+const express = require('express');
+const app = require('../app');
+const router = express.Router();
+const userController = require('../controllers/userController');
+const jwt = require('../middleware/jwt');
+const upload = require('../middleware/multer');
+// const uploadImg = upload('../images');
+console.log("router");
+router.post('/check/email',userController.getEmail);
+router.post('/auth/email', userController.authEmail);
+router.post('/join', userController.joinUser);
+router.post('/login', userController.userLogin);
+router.get('/', userController.main);
+router.get('/mypage', jwt.checkToken,userController.getUser);
+router.post('/mypage/img', jwt.checkToken, upload.single('image') ,userController.editImg)
+// router.get('/', function(req, res, next) {
+//   res.send("users");
+// });
 module.exports = router;
