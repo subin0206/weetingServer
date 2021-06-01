@@ -1,8 +1,13 @@
+// const Connection = require('mysql2/typings/mysql/lib/Connection');
+// const { connect } = require('../app');
 const moimModel = require('../model/moimModel');
 
 exports.createMoim = (req, res) => {
 
-    var meeting_img = req.file == undefined ? null : req.file.location;
+    // var meeting_img = req.file == undefined ? null : req.file.path; // 로컬
+    var meeting_img = req.file == undefined ? null : req.file.location; // aws s3
+
+    console.log(meeting_img);
 
     if (req.body.age_min > req.body.age_max) {
         res.json({
@@ -80,25 +85,66 @@ exports.showDetailMoim = (req, res) => {
                     'state' : 200,
                     'message' : '조회 성공',
                     'meeting' : meeting,
-                    'is_member' : 'dsafa'
                 });
+            } else {
+                res.json({
+                    'state' : meeting.state,
+                    'message' : meeting.message,
+                })
             }
         }
         else {
             res.json({
                 'state' : 500,
                 'message' : '조회 실패',
-                'is_member' : 'dsafa'
             });
         }
     })
 }
 
-// exports.testMoim = (req, res) => {
-//     // moimModel.testMoim((result) => {};
-//     moimModel.testMoim((result) => {
-//         if (result) {
-//             res.json(result);
-//         }
-//     });
-// }
+exports.editMoim = (req, res) => {
+
+    var meeting_img = req.file == undefined ? null : req.file.location; // aws s3
+
+    let meeting_id = req.params.meeting_id;
+
+    let meeting_info = {
+        'meeting_id' : meeting_id,
+        'meeting_name' : req.body.meeting_name,
+        'category' : req.body.category,
+        'meeting_time' : req.body.meeting_time,
+        'age_max' : req.body.age_max,
+        'age_min' : req.body.age_min,
+        'meeting_img' : meeting_img,
+        'meeting_description' : req.body.meeting_description,
+        'meeting_recruitment' : req.body.meeting_recruitment,
+        'meeting_location' : req.body.meeting_location,
+        'moim_master' : req.body.moim_master,
+    }
+
+    moimModel.editMoim(meeting_info, (meeting) => {
+        if (meeting) {
+            if (meeting.state == 200) {
+                res.json({
+                    'state' : meeting.state,
+                    'message' : meeting.message
+                });
+            }
+        }
+    })
+}
+
+exports.deleteMoim = (req, res) => {
+    let meeting_id = req.params.meeting_id;
+
+    moimModel.deleteMoim(meeting_id, (results) => {
+        if (results) {
+            if (results.state == 200) {
+                res.json({
+                    'state' : results.state,
+                    'message' : results.message
+                })
+            }
+        }
+    })
+}

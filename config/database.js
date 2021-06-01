@@ -9,6 +9,10 @@ module.exports = {
     db_info:function(){
         return {
             host: 'localhost',
+            port: '3306',
+            user: 'root',
+            password: 'soncw00',
+            database: 'Weeting'
         };
     }
 }

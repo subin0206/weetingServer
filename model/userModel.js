@@ -76,6 +76,7 @@ exports.insertImg = (data, result) =>{
             } 
     });
 };
+
 exports.insertUser = (data, result) => {
     bcrypt.genSalt(saltRound, (err, salt) => {
         if (err) return next(err);

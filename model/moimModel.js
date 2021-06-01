@@ -97,6 +97,7 @@ exports.createMoim = (data, result) => {
                     let sql2 = 'INSERT INTO moim (meeting_name, category, meeting_time, age_max, age_min, meeting_img, meeting_description, meeting_recruitment, meeting_location, moim_master) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         
                     console.log(data.meeting_time);
+                    console.log(data.meeting_img);
 
                     let bindParam = [
                         data.meeting_name,
@@ -118,11 +119,34 @@ exports.createMoim = (data, result) => {
                 
                             throw new Error(err);
                         } else {
-                            result({
-                                'state' : 200,
-                                results
+                            let sql4 = 'select * from moim where meeting_name = ?';
+                            let meeting_name = data.meeting_name;
+                            connection.query(sql4, meeting_name, (err, results2, fields) => {
+                                if (results) {
+                                    let user_id = parseInt(data.moim_master);
+                                    console.log(typeof(user_id));
+                                    let sql5 = 'INSERT INTO moim_member (meeting_id, user_id) VALUES (?, ?)';
+                                    let bind = [
+                                        results2[0].meeting_id,
+                                        user_id
+                                    ]
+                                    connection.query(sql5, bind, (err, results3, fields) => {
+                                        if (err) {
+                                            console.error('Error code : ' + err.code);
+                                            console.error('Error Message : ' + err.message);
+                                
+                                            throw new Error(err);
+                                        } else {
+                                            if (results3) {
+                                                result({
+                                                    'state' : 200,
+                                                    results
+                                                });
+                                            }
+                                        }
+                                    })
+                                }
                             })
-                            // result(JSON.parse(JSON.stringify(results)));
                         }
                     });
                 }
@@ -142,28 +166,99 @@ exports.showDetailMoim = (data, result) => {
 
             throw new Error(err);
         } else {
-            result({
-                'state' : 200,
-                'message' : "조회 성공",
-                'meeting' : results
-            })
+            // console.log(results[0]);
+            if (results[0] == undefined){
+                result({
+                    'state' : 404,
+                    'message' : '없는 모임입니다.'
+                });
+            } else {
+                let sql = 'select count(*) as headcount from moim_member where meeting_id = ?';
+                
+                connection.query(sql, data, (err, results2, fields) => {
+                    result({
+                        'state' : 200,
+                        'message' : "조회 성공",
+                        'meeting' : results,
+                        'headcount' : results2[0].headcount
+                    });
+                })
+            }
             // result(JSON.parse(JSON.stringify(results)));
         }
     });
 };
 
-// 여기 밑으로는 암것도 아님.
+exports.editMoim = (data, result) => {
+    
+    let sql = 'select * from moim where meeting_id = ?';
+    let meeting_id = data.meeting_id;
 
-// exports.testMoim = (result) => {
-//     let sql = 'SELECT * FROM user WHERE user_email';
-//     connection.query(sql, (err, results, fields) => {
-//         if (err) {
-//             console.error('Error code : ' + err.code);
-//             console.error('Error Message : ' + err.message);
+    let meeting_img = data.meeting_img;
 
-//             throw new Error(err);
-//         } else {
-//             result(JSON.parse(JSON.stringify(results)));
-//         }
-//     });
-// }
+    let sql2;
+
+    connection.query(sql, meeting_id, (err, results, fields) => {
+        if (err) {
+            console.error('Error code : ' + err.code);
+            console.error('Error Message : ' + err.message);
+
+            throw new Error(err);
+        } else {
+                if (results){
+                    if (results.meeting_img === meeting_img) {
+                        sql2 = 'UPDATE moim SET meeting_name = ?, category = ?, meeting_time = ?, age_max = ?, age_min = ?, meeting_description = ?, meeting_recruitment = ?, meeting_location = ?, moim_master = ? WHERE meeting_id = ?';
+                    } else {
+                        sql2 = 'UPDATE moim SET meeting_name = ?, category = ?, meeting_time = ?, age_max = ?, age_min = ?, meeting_img = ?, meeting_description = ?, meeting_recruitment = ?, meeting_location = ?, moim_master = ? WHERE meeting_id = ?';
+                    }
+
+                    let bindInfo = [
+                        data.meeting_name,
+                        data.category,
+                        data.meeting_time,
+                        data.age_max,
+                        data.age_min,
+                        data.meeting_img,
+                        data.meeting_description,
+                        data.meeting_recruitment,
+                        data.meeting_location,
+                        data.moim_master,
+                        data.meeting_id
+                    ]
+
+                    connection.query(sql2, bindInfo, (err, results, fields) => {
+                        if (err) {
+                            console.error('Error code : ' + err.code);
+                            console.error('Error Message : ' + err.message);
+                
+                            throw new Error(err);
+                        } else {
+                            result({
+                                'state' : 200,
+                                'message' : '수정 성공',
+                            })
+                        }
+                    });
+                }
+        }
+    })
+}
+
+exports.deleteMoim = (data, result) => {
+    
+    let sql = 'delete from moim where meeting_id = ?';
+
+    connection.query(sql, data, (err, results, fields) => {
+        if (err) {
+            console.error('Error code : ' + err.code);
+            console.error('Error Message : ' + err.message);
+
+            throw new Error(err);
+        } else {
+            result({
+                'state' : 200,
+                'message' : '삭제 성공',
+            });
+        }
+    });
+}
