@@ -186,4 +186,3 @@ exports.main = (req, res) => {
     console.log("잘 되니");
     res.send('respond with a resource');
 }
-

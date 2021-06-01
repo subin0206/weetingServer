@@ -113,5 +113,3 @@ exports.insertUser = (data, result) => {
     });
     
 };
-
-
