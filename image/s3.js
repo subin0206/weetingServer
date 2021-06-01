@@ -31,9 +31,8 @@ const upload = multer({
         // contentType : multerS3.AUTO_CONTENT_TYPE,
         acl : "public-read",
         key : (req, file, cb) => {
-            let extension = path.extname(file.originalname) // 뒤에 .jpg 이런거 말하는 것.
-            // cb(null, 'moim_image/'+Date.now().toString + extension); // toString 붙이면 이상하게 저장됨. function toString() { [native code] }.jpg 이렇게.
-            cb(null, 'moim_image/' + Date.now() + extension); // 이렇게 하면 moim_image 폴더 안에 Date.now() + extension = 이상한 숫자들 10글자정도의 나열로 저장됨.
+            let extension = path.extname(file.originalname);
+            cb(null, 'moim_image/' + Date.now() + extension);
         }
     }),
     limits : {fileSize : 5 * 1024 * 1024}
