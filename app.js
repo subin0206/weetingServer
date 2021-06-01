@@ -27,7 +27,7 @@ app.use(express.json());
 app.use('/', usersRouter);
 // app.use('/users', usersRouter);
 app.use('/moim', moimRouter);
-console.log("test222");
+// console.log("test222");
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
