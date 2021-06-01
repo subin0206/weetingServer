@@ -55,6 +55,27 @@ exports.selectUserInfo = (data, result) => {
             } 
         });
 };
+exports.insertImg = (data, result) =>{
+    let sql = 'update user set profile_img = ? where email = ?';
+    console.log(data, 'data');
+    let bindParam = [data.profile_img, data.email];
+    connection.query(sql, bindParam, (err, results, fields)=>{
+        if (err) { 
+            console.error('Error code : ' + err.code); 
+            console.error('Error Message : ' + err.message); 
+            if(err.message.length > 0){
+                result({
+                    "state": 300,
+                    "message": err.message
+                });
+            }
+
+        } 
+            else { 
+                result(JSON.parse(JSON.stringify(results)));
+            } 
+    });
+};
 exports.insertUser = (data, result) => {
     bcrypt.genSalt(saltRound, (err, salt) => {
         if (err) return next(err);

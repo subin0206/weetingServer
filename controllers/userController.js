@@ -157,6 +157,31 @@ exports.joinUser = (req, res) =>{
     });       
 
 };
+exports.editImg = (req, res) =>{
+    const imgUrl = req.file;
+    console.log(imgUrl,'img');
+    
+    let item = {
+        'email' : req.decoded.email,
+        'img':req.file
+    };
+    console.log(req.decoded.email, 'email');
+    userModel.insertImg(item, (result)=>{
+        console.log(result, 'results');
+        if(result){
+            res.json({
+                'state':200,
+                'message':'이미지 업로드'
+            })
+        }
+        else{
+            res.json({
+                'state':300,
+                'message':'실패'
+            })
+        }
+    });
+};
 exports.main = (req, res) => {
     console.log("잘 되니");
     res.send('respond with a resource');
