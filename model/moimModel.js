@@ -5,7 +5,6 @@ exports.createMoim = (data, result) => {
 
     let sql1 = 'select * from moim where meeting_name = ?';
 
-    // let bindTitle = {"meeting_name" : data.meeting_name}; // 이렇게 하면 안됨. results가 undefined or [] 로 아무것도 못 받아옴.
     let bindTitle = data.meeting_name;
 
     // console.log(data.meeting_name);
