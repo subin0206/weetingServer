@@ -1,5 +1,6 @@
 // const Connection = require('mysql2/typings/mysql/lib/Connection');
 // const { connect } = require('../app');
+// const Connection = require('mysql2/typings/mysql/lib/Connection');
 const moimModel = require('../model/moimModel');
 
 exports.createMoim = (req, res) => {
@@ -80,7 +81,6 @@ exports.showDetailMoim = (req, res) => {
     moimModel.showDetailMoim(meeting_id, (meeting) => {
         if (meeting) {
             if (meeting.state === 200) {
-                console.log("들어오나?");
                 res.json({
                     'state' : 200,
                     'message' : '조회 성공',
@@ -147,4 +147,58 @@ exports.deleteMoim = (req, res) => {
             }
         }
     })
+}
+
+exports.participateMoim = (req, res) => {
+    let meeting_id = req.params.meeting_id;
+    let user_id = req.body.user_id;
+
+    let bind = {
+        'meeting_id' : meeting_id,
+        'user_id' : user_id
+    };
+
+    moimModel.participateMoim(bind, (result) => {
+        if (result.state === 200) {
+            res.json({
+                'state' : result.state,
+                'message' : result.message
+            });
+        } else if (result.state === 405) {
+            res.json({
+                'state' : result.state,
+                'message' : result.message
+            })
+        } else {
+            res.json({
+                'state' : 500,
+                'message' : '예상치 못한 에러'
+            })
+        }
+    })
+
+}
+
+exports.withdrawMoim = (req, res) => {
+    let meeting_id = req.params.meeting_id;
+    let user_id = req.body.user_id;
+
+    let bind = {
+        'meeting_id' : meeting_id,
+        'user_id' : user_id
+    }
+
+    moimModel.withdrawMoim(bind, (result) => {
+        if (result.state == 200){
+            res.json({
+                'state' : result.state,
+                'message' : result.message
+            });
+        } else {
+            res.json({
+                'state' : result.state,
+                'message' : result.message
+            });
+        }
+    });
 }

@@ -10,6 +10,7 @@ var app = express();
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var moimRouter = require('./routes/moim');
+var searchRouter = require('./routes/search');
 
 // view engine setup
 app.set('port', process.env.PORT || 4000);
@@ -25,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/index', indexRouter);
 app.use('/user', usersRouter);
 app.use('/moim', moimRouter);
+app.use('/search', searchRouter);
 
 app.use(express.json());
 

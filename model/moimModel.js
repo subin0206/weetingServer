@@ -262,3 +262,83 @@ exports.deleteMoim = (data, result) => {
         }
     });
 }
+
+exports.participateMoim = (data, result) => {
+
+    let sql1 = 'select * from moim_member where meeting_id = ? and user_id = ?'
+
+    let sql2 = 'insert into moim_member (meeting_id, user_id) value (?, ?)';
+
+    let bind = [
+        data.meeting_id,
+        data.user_id
+    ]
+
+    connection.query(sql1, bind, (err, results, fields) => {
+        if (results[0] === undefined) {
+            connection.query(sql2, bind, (err, results, fields) => {
+                if (err) {
+                    console.error('Error code : ' + err.code);
+                    console.error('Error message : ' + err.message);
+        
+                    throw new Error (err);
+                } else {
+                    if (results.affectedRows === 1) {
+                        result({
+                            'state' : 200,
+                            'message' : '참여 성공'
+                        });
+                    } else {
+                        result({
+                            'state' : 404,
+                            'message' : '참여 실패'
+                        })
+                    }
+                }
+            });
+        } else {
+            result({
+                'state' : 405,
+                'message' : '이미 참여된 모임'
+            })
+        }
+    });
+}
+
+exports.withdrawMoim = (data, result) => {
+    let sql1 = 'select * from moim_member where meeting_id = ? and user_id = ?';
+    let sql2 = 'delete from moim_member where meeting_id = ? and user_id = ?';
+
+    let bind = [
+        data.meeting_id,
+        data.user_id
+    ];
+
+    connection.query(sql1, bind, (err, results1, fields) => {
+        if (results1[0] === undefined) {
+            result({
+                'state' : 404,
+                'message' : '가입하지 않은 모임은 탈퇴할 수 없습니다.'
+            });
+        } else {
+            connection.query(sql2, bind, (err, results2, fields) => {
+                if (err) {
+                    console.error('Error code : ' + err.code);
+                    console.error('Error message : ' + err.message);
+        
+                    throw new Error (err);
+                } else if (results2.affectedRows === 1) {
+                    result({
+                        'state' : 200,
+                        'message' : '탈퇴 성공'
+                    });
+                } else {
+                    result({
+                        'state' : 404,
+                        'message' : '알 수 없는 에러'
+                    });
+                }
+            });
+        }
+    });
+}

@@ -11,8 +11,8 @@ router.post('/editMoim/:meeting_id', upload.single('meeting_img'), moimControlle
 
 router.get('/deleteMoim/:meeting_id', moimController.deleteMoim);
 
-// router.get('/showMoimList', moimController.showMoimList);
+router.post('/participateMoim/:meeting_id', moimController.participateMoim);
 
-// router.get('/testMoim', moimController.testMoim);
+router.post('/withdrawMoim/:meeting_id', moimController.withdrawMoim);
 
 module.exports = router;
