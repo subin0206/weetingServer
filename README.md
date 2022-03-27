@@ -9,8 +9,12 @@
 + node.js
 + aws
 + mariaDB
++ [안드로이드 스튜디오]()
 ### 디자인 패턴
 [MVC 패턴 적용](https://respected-locket-886.notion.site/MVC-003176e95c724ac4a88e59821125bc52)
+### 개발 과정   
+개발하면서 났던 오류, 기능 구현 방법 등을 모아둔 페이지   
+[링크](https://respected-locket-886.notion.site/ab9fc681b5f5485c89c50f6b990c8b41)
 ### 데이터베이스  
 + table 목록   
 ![image](https://user-images.githubusercontent.com/46561481/160273051-0513e434-ae12-4eb0-a0b8-a6c6756cae42.png)   
