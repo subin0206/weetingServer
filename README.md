@@ -24,7 +24,11 @@
 + moim_member table   
 ![image](https://user-images.githubusercontent.com/46561481/160273760-dd282cb8-e343-4e84-bcbd-54079ae5b64f.png)   
 + category table   
-![image](https://user-images.githubusercontent.com/46561481/160273785-b0c4e895-bedf-4141-9dc3-bb8acb3fa74f.png)
+![image](https://user-images.githubusercontent.com/46561481/160273785-b0c4e895-bedf-4141-9dc3-bb8acb3fa74f.png)   
+
+### Contributor
++ 김수빈
++ 손주희
 
 
 
